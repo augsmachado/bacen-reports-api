@@ -1,6 +1,7 @@
 import express from "express";
 
 import status from "./routes/status.routes.js";
+import reports from "./routes/reports.routes.js";
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -8,6 +9,9 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 
 app.use("/api/v1/status", status);
+
+app.use("/api/v1/reports", reports);
+
 app.use("*", (req, res) => {
 	res.status(400).json({ error: "Not route found" });
 });

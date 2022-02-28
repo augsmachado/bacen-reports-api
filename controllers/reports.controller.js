@@ -1,21 +1,24 @@
-import pkg from "uuid";
 import request from "request";
 
-const { v4: uuidv4 } = pkg;
-
+const baseUrl = "https://olinda.bcb.gov.br/olinda/service";
+const headers = { accept: "application/json;odata.metadata=minimal" };
 export default class ReportsController {
-	static async getCurrencyDailyReport(req, res) {
+	static async getSelicDaily(req, res) {
+		const { format, orderBy, limit, skip } = req.params;
+
 		try {
 			var options = {
 				method: "GET",
-				url: "https://olinda.bcb.gov.br/olinda/service/ResumoCamaras_en/version/v1/odata/Cetip?%24format=json&%24top=5",
-				headers: {
-					accept: "application/json;odata.metadata=minimal",
-				},
+				url: `${baseUrl}/ResumoCamaras_en/version/v1/odata/Selic`,
+				headers: headers,
 			};
-			request(options, function (error, response) {
-				if (error) throw new Error(error);
-				res.json(JSON.parse(response.body));
+			request(options, (err, response) => {
+				if (err) throw new Error(err);
+
+				const body = JSON.parse(response.body);
+
+				console.log(body.value[body.value.length - 1]);
+				res.json(body.value);
 			});
 		} catch (err) {
 			res.json(err);

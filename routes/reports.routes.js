@@ -16,6 +16,8 @@ router.route("/circulation").get(CirculationCtrl.getCurrencyCirculation);
  * The available file presents daily information on the quantities of banknotes and coins in circulation (commemorative coins are not
  * included). The information is separated by type (banknote or coin), series and denomination of the brazilian Real (symbols: R$, BRL).
  */
-//router.route("/circulation/detailed").get(ReportsCtrl.getCurrencyCirculationDetailed);
+router
+	.route("/circulation/detailed")
+	.get(CirculationCtrl.getCurrencyCirculationDetailed);
 
 export default router;

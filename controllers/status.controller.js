@@ -5,7 +5,7 @@ export default class StatusController {
 	static async getStatus(req, res) {
 		try {
 			let response = {
-				msg: "Welcome to Bacen XPTO API!",
+				msg: "Welcome to Bacen Report API!",
 				name: "bacen",
 				environment: "production",
 				version: "1.0.0",

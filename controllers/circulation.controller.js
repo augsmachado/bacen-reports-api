@@ -4,6 +4,8 @@ const baseUrl =
 	"https://olinda.bcb.gov.br/olinda/service/mecir_dinheiro_em_circulacao/version/v1/odata/";
 const headers = { accept: "application/json;odata.metadata=minimal" };
 
+const MAX_NUMBER_OF_RESULTS_PER_PAGE = 20;
+
 export default class CirculationController {
 	// Request daily records of the quantities of banknotes and coins in circulation
 	static async getCurrencyCirculation(req, res) {
@@ -11,14 +13,18 @@ export default class CirculationController {
 
 		const limit = req.query.limit;
 		const date = req.query.date;
-		const orderBy = req.query.orderBy;
 		const filter = req.query.filter;
 
 		// Compose the query parameters to be requested to the server
 		try {
 			// Is limit empty or bigger than zero?
-			if (limit != null && limit > 0) {
-				concat = concat + "&%24top=" + limit;
+			// If yes, show the first result order by desc
+			if (
+				limit != null &&
+				limit > 0 &&
+				limit <= MAX_NUMBER_OF_RESULTS_PER_PAGE
+			) {
+				concat = `${concat}&%24top=${limit}&%24orderby=Data%20desc`;
 			} else {
 				concat = concat + "&%24top=20&%24orderby=Data%20desc";
 			}
@@ -26,15 +32,6 @@ export default class CirculationController {
 			// Is date empty?
 			if (date != null) {
 				concat = concat + "&%24filter=Data%20eq%20" + date;
-			}
-
-			// Is order by empty and equal to asc or desc?
-			if (
-				orderBy != null &&
-				(orderBy.toLowerCase() === "asc" ||
-					orderBy.toLowerCase() === "desc")
-			) {
-				concat = concat + "&%24orderby=Data%20" + orderBy.toLowerCase();
 			}
 		} catch (err) {
 			console.error(
@@ -94,7 +91,7 @@ export default class CirculationController {
 
 	static async getCurrencyCirculationDetailed(req, res) {
 		let concat = "detailed_daily_report?%24format=json";
-		let numberResultsPerPage = 50;
+		let numberResultsPerPage = MAX_NUMBER_OF_RESULTS_PER_PAGE;
 		let page = 0;
 
 		const date = req.query.date;

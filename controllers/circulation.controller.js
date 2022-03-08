@@ -1,7 +1,7 @@
 import request from "request";
 
 const baseUrl =
-	"https://olinda.bcb.gov.br/olinda/service/mecir_dinheiro_em_circulacao/version/v1/odata/";
+	"https://olinda.bcb.gov.br/olinda/service/mecir_dinheiro_em_circulacao/version/v1/odata";
 const headers = { accept: "application/json;odata.metadata=minimal" };
 
 const MAX_NUMBER_OF_RESULTS_PER_PAGE = 20;
@@ -9,7 +9,7 @@ const MAX_NUMBER_OF_RESULTS_PER_PAGE = 20;
 export default class CirculationController {
 	// Request daily records of the quantities of banknotes and coins in circulation
 	static async getCurrencyCirculation(req, res) {
-		let concat = "daily_report?%24format=json";
+		let concat = "/daily_report?%24format=json";
 
 		const limit = req.query.limit;
 		const date = req.query.date;
@@ -90,7 +90,7 @@ export default class CirculationController {
 	}
 
 	static async getCurrencyCirculationDetailed(req, res) {
-		let concat = "detailed_daily_report?%24format=json";
+		let concat = "/detailed_daily_report?%24format=json";
 		let numberResultsPerPage = MAX_NUMBER_OF_RESULTS_PER_PAGE;
 		let page = 0;
 

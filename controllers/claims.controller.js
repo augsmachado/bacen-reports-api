@@ -1,16 +1,23 @@
+/**
+ * The ranking of claims consolidates the citizens claims against Financial Institutions that were
+ * received, analyzed and closed by the Central Bank in each reference period. The calculation
+ * of the claims index considers the amount of regulated claims with evidences of noncompliance
+ * per each one million clients of the financial institution.
+ */
+
 import request from "request";
 
 const baseUrl = "https://www3.bcb.gov.br/rdrweb/rest/ext/ranking";
 const headers = { accept: "application/json;odata.metadata=minimal" };
 
-export default class RankingsController {
+export default class ClaimsController {
 	static async getEveryExistingClaims(req, res) {
 		const year = req.query.year;
 
 		try {
 			var options = {
 				method: "GET",
-				url: `${baseUrl}`,
+				url: `${baseUrl}/`,
 				headers: headers,
 			};
 			request(options, (err, response) => {
@@ -33,14 +40,14 @@ export default class RankingsController {
 					}
 				} catch (err) {
 					console.error(
-						`Unable to filter the results by year: ${err}`
+						`Unable to filter the claims results by year: ${err}`
 					);
 				}
 
 				res.json(results);
 			});
 		} catch (err) {
-			res.json(err);
+			res.json(`Unable to request report of bank claims: ${err}`);
 		}
 	}
 }

@@ -7,26 +7,111 @@
 
 import request from "request";
 
-const baseUrl = "https://www3.bcb.gov.br/vet/rest/v2";
-const headers = { accept: "application/json;odata.metadata=minimal" };
+const BASE_URL = "https://www3.bcb.gov.br/vet/rest/v2";
+const HEADERS = { accept: "application/json;odata.metadata=minimal" };
 
+const DATE_SIZE = 7;
+const CURRENCY_SIZE = 3;
 export default class VetController {
 	static async getVetRanking(req, res) {
-		//https://www3.bcb.gov.br/vet/rest/v2/ranking?mesAno=022017&valor=100&moeda=USD
-		//&finalidade=1&tipoOperacao=C&formaDeEntrega=1
-		//mesAno
-		//valor
-		//moeda = currency
-		//finalidade = purposes
-		//formaDeEntrega = delivery-forms
+		let concat = "/ranking";
+
+		const monthYear = req.query.monthYear; //std mesAno
+		const value = req.query.value;
+		const currency = req.query.currency;
+		const purpose = req.query.purpose;
+		const deliveryForms = req.query.deliveryForm;
+
+		// Validate date format and concat them with BASE_URL
+		try {
+			if (
+				monthYear.toString().length === DATE_SIZE ||
+				monthYear.toString().length === DATE_SIZE - 1
+			) {
+				const date = monthYear.replace("-", "");
+				concat = concat + "?mesAno=" + date;
+			}
+		} catch (err) {
+			console.error(
+				`Unable to request the VET ranking because DATE parameter mustn't be empty or the size string has more than ${DATE_SIZE} characters`
+			);
+
+			return false;
+		}
+
+		// Validate value format and concat them with BASE_URL
+		try {
+			if (value >= 1) {
+				concat = concat + "&valor=" + value;
+			}
+		} catch (err) {
+			console.error(
+				`Unable to request the VET ranking because VALUE parameter mustn't be greater or equal than 1`
+			);
+			return false;
+		}
+
+		// Validate currency format and concat them with BASE_URL
+		try {
+			if (currency.toString().length === CURRENCY_SIZE) {
+				concat = concat + "&moeda=" + currency.toString().toUpperCase();
+			}
+		} catch (err) {
+			console.error(
+				`Unable to request the VET ranking because CURRENCY parameter mustn't be empty or the size string has more than ${CURRENCY_SIZE} characters`
+			);
+			return false;
+		}
+
+		// Validate purpose format and concat them with BASE_URL
+		try {
+			if (purpose.length > 0 && purpose > 0) {
+				concat = concat + "&finalidade=" + purpose;
+			}
+		} catch (err) {
+			console.error(
+				`Unable to request VET ranking because PURPOSE parameter mustn't be empty`
+			);
+			return false;
+		}
+
+		// Validate delivery format and concat them with BASE_URL
+		try {
+			if (deliveryForms.length > 0 && deliveryForms > 0) {
+				concat =
+					concat + "&tipoOperacao=C&formaDeEntrega=" + deliveryForms;
+			}
+		} catch (err) {
+			console.error(
+				`Unable to request VET ranking because DELIVERY FORMS parameter mustn't be empty`
+			);
+			return false;
+		}
+
+		try {
+			var options = {
+				method: "GET",
+				url: `${BASE_URL}${concat}`,
+				headers: HEADERS,
+			};
+			request(options, (err, response) => {
+				if (err) throw new Error(err);
+
+				const body = JSON.parse(response.body);
+
+				res.json(body);
+			});
+		} catch (err) {
+			res.json(`Unable to request the VET purposes: ${err}`);
+		}
 	}
 
 	static async getVetPurposes(req, res) {
 		try {
 			var options = {
 				method: "GET",
-				url: `${baseUrl}/dominio/finalidades`,
-				headers: headers,
+				url: `${BASE_URL}/dominio/finalidades`,
+				headers: HEADERS,
 			};
 			request(options, (err, response) => {
 				if (err) throw new Error(err);
@@ -60,8 +145,8 @@ export default class VetController {
 		try {
 			var options = {
 				method: "GET",
-				url: `${baseUrl}/dominio/formasDeEntrega`,
-				headers: headers,
+				url: `${BASE_URL}/dominio/formasDeEntrega`,
+				headers: HEADERS,
 			};
 			request(options, (err, response) => {
 				if (err) throw new Error(err);
@@ -97,8 +182,8 @@ export default class VetController {
 		try {
 			var options = {
 				method: "GET",
-				url: `${baseUrl}/dominio/moedas`,
-				headers: headers,
+				url: `${BASE_URL}/dominio/moedas`,
+				headers: HEADERS,
 			};
 			request(options, (err, response) => {
 				if (err) throw new Error(err);
@@ -134,8 +219,8 @@ export default class VetController {
 		try {
 			var options = {
 				method: "GET",
-				url: `${baseUrl}/dominio/paises`,
-				headers: headers,
+				url: `${BASE_URL}/dominio/paises`,
+				headers: HEADERS,
 			};
 			request(options, (err, response) => {
 				if (err) throw new Error(err);

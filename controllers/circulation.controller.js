@@ -1,8 +1,8 @@
 import request from "request";
 
-const baseUrl =
+const BASE_URL =
 	"https://olinda.bcb.gov.br/olinda/service/mecir_dinheiro_em_circulacao/version/v1/odata";
-const headers = { accept: "application/json;odata.metadata=minimal" };
+const HEADERS = { accept: "application/json;odata.metadata=minimal" };
 
 const MAX_NUMBER_OF_RESULTS_PER_PAGE = 20;
 
@@ -43,8 +43,8 @@ export default class CirculationController {
 		try {
 			var options = {
 				method: "GET",
-				url: `${baseUrl}${concat}`,
-				headers: headers,
+				url: `${BASE_URL}${concat}`,
+				headers: HEADERS,
 			};
 
 			request(options, (err, resp) => {
@@ -127,8 +127,8 @@ export default class CirculationController {
 		try {
 			var options = {
 				method: "GET",
-				url: `${baseUrl}${concat}`,
-				headers: headers,
+				url: `${BASE_URL}${concat}`,
+				headers: HEADERS,
 			};
 
 			request(options, (err, resp) => {

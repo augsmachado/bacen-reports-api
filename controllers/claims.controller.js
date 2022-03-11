@@ -7,8 +7,8 @@
 
 import request from "request";
 
-const baseUrl = "https://www3.bcb.gov.br/rdrweb/rest/ext/ranking";
-const headers = { accept: "application/json;odata.metadata=minimal" };
+const BASE_URL = "https://www3.bcb.gov.br/rdrweb/rest/ext/ranking";
+const HEADERS = { accept: "application/json;odata.metadata=minimal" };
 
 export default class ClaimsController {
 	static async getEveryExistingClaims(req, res) {
@@ -17,8 +17,8 @@ export default class ClaimsController {
 		try {
 			var options = {
 				method: "GET",
-				url: `${baseUrl}/`,
-				headers: headers,
+				url: `${BASE_URL}/`,
+				headers: HEADERS,
 			};
 			request(options, (err, response) => {
 				if (err) throw new Error(err);

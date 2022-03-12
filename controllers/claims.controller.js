@@ -29,12 +29,11 @@ export default class ClaimsController {
 
 				// Is it possible filter the results for specific year?
 				try {
-					if (year != null || year != undefined) {
-						for (const years in body.anos) {
-							if (body.anos[years].ano === year) {
-								results.push(body.anos[years]);
-							}
-						}
+					if (year !== null || year !== undefined) {
+						let search = body.anos.find(
+							(value) => value.ano === year
+						);
+						results.push(search);
 					} else {
 						results = body.anos;
 					}

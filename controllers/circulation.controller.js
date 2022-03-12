@@ -7,7 +7,11 @@ const HEADERS = { accept: "application/json;odata.metadata=minimal" };
 const MAX_NUMBER_OF_RESULTS_PER_PAGE = 20;
 
 export default class CirculationController {
-	// Request daily records of the quantities of banknotes and coins in circulation
+	/*
+	 * Currency in circulation daily report
+	 * Daily report presents information about the quantities of banknotes and coins in circulation (commemorative coins are't includeded).
+	 * The information is separated by type (banknote or coin) and denomination of Brazilian Real (symbols: R$, BRL)
+	 */
 	static async getCurrencyCirculation(req, res) {
 		let concat = "/daily_report?%24format=json";
 
@@ -89,6 +93,11 @@ export default class CirculationController {
 		}
 	}
 
+	/*
+	 * Currency in circulation detailed daily report
+	 * The available file presents daily information on the quantities of banknotes and coins in circulation (commemorative coins are not
+	 * included). The information is separated by type (banknote or coin), series and denomination of the brazilian Real (symbols: R$, BRL).
+	 */
 	static async getCurrencyCirculationDetailed(req, res) {
 		let concat = "/detailed_daily_report?%24format=json";
 		let numberResultsPerPage = MAX_NUMBER_OF_RESULTS_PER_PAGE;

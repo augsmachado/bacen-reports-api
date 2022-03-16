@@ -16,7 +16,7 @@ app.use("/api/status", status); // ok
 app.use("/api/v1/circulation", circulation); // ok
 app.use("/api/v1/claims", claims); // ok
 app.use("/api/v1/vet", vet); // ok
-app.use("/api/v1/ccr", ccr);
+app.use("/api/v1/ccr", ccr); // ok
 app.use("/api/v1/savings", savings);
 
 app.use("*", (req, res) => {

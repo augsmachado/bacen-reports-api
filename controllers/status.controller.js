@@ -6,7 +6,7 @@ export default class StatusController {
 		try {
 			let response = {
 				msg: "Welcome to Bacen Report API!",
-				name: "bacen",
+				name: "bacen-report-api",
 				environment: "production",
 				version: "1.0.0",
 				uptime: new Date().getTime(),

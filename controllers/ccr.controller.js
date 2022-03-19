@@ -62,11 +62,16 @@ export default class CCRController {
 				results.push(body.value[0].Country);
 
 				for (let key = 1; key < body.value.length; key++) {
-					if (body.value[key].Country !== results[temp]) {
-						results.push(body.value[key].Country);
+					if (body.value[key].Country !== results[temp].country) {
+						let result = {
+							country: body.value[key].Country,
+						};
+						results.push(result);
 						temp++;
 					}
 				}
+
+				results.shift();
 
 				res.json(results);
 			});

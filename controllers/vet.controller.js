@@ -97,9 +97,23 @@ export default class VetController {
 			request(options, (err, response) => {
 				if (err) throw new Error(err);
 
+				let results = [];
 				const body = JSON.parse(response.body);
 
-				res.json(body);
+				for (const key in body.rankingVet) {
+					let temp = {
+						code: body.rankingVet[key].codIf,
+						name: body.rankingVet[key].nomeIf,
+						numOperations: body.rankingVet[key].numOperacoes,
+						difference: body.rankingVet[key].diferenca,
+						simulatedValue: body.rankingVet[key].valorSimulado,
+						vet: body.rankingVet[key].vet,
+					};
+
+					results.push(temp);
+				}
+
+				res.json(results);
 			});
 		} catch (err) {
 			res.json(`Unable to request the VET purposes: ${err}`);

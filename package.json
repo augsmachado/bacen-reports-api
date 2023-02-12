@@ -21,7 +21,7 @@
   "homepage": "https://github.com/augsmachado/mern_jubilant_chainsaw#readme",
   "dependencies": {
     "express": "^4.17.3",
-    "nodemon": "^2.0.15",
+    "nodemon": "^2.0.20",
     "request": "^2.88.2",
     "request-promise": "^4.2.6"
   }
